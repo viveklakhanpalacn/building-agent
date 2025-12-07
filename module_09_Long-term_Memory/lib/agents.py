@@ -18,8 +18,10 @@ class Agent:
     def __init__(self, 
                  model_name: str,
                  instructions: str, 
+                 openai_api_key: str, 
                  tools: List[Tool] = None,
-                 temperature: float = 0.7):
+                 temperature: float = 0.7,
+                 base_url: Optional[str] = None):
         """
         Initialize an Agent
         
@@ -33,7 +35,8 @@ class Agent:
         self.tools = tools if tools else []
         self.model_name = model_name
         self.temperature = temperature
-        
+        self.base_url = base_url
+        self.openai_api_key = openai_api_key
         # Initialize memory and state machine
         self.memory = ShortTermMemory()
         self.workflow = self._create_state_machine()
@@ -61,6 +64,8 @@ class Agent:
             model=self.model_name,
             temperature=self.temperature,
             tools=self.tools
+            api_key=self.openai_api_key
+            base_url=self.base_url if self.base_url else None
         )
 
         response = llm.invoke(state["messages"])

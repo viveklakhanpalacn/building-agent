@@ -16,12 +16,14 @@ class LLM:
         model: str = "gpt-4o-mini",
         temperature: float = 0.0,
         tools: Optional[List[Tool]] = None,
-        api_key: Optional[str] = None
+        api_key: Optional[str] = None,
+        base_url: Optional[str] = None
     ):
         self.model = model
         self.temperature = temperature
-        self.client = OpenAI(api_key=api_key) if api_key else OpenAI(
-            base_url = "https://openai.vocareum.com/v1",
+        self.base_url = base_url
+        self.client = OpenAI(
+            base_url = self.base_url if self.base_url else None,
             api_key = api_key
         )
         self.tools: Dict[str, Tool] = {
